@@ -47,7 +47,7 @@ elseif(USING_CLANG_FOR_CUDA)
     foreach(_FILE IN LISTS _ARGS)
       if(${_FILE} MATCHES ".*\.cu$")
         set_source_files_properties(${_FILE} PROPERTIES LANGUAGE CXX)
-        set_source_files_properties(${_FILE} PROPERTIES COMPILE_FLAGS "-x cuda")
+        set_source_files_properties(${_FILE} PROPERTIES COMPILE_FLAGS "-x cuda ${CLANG_CUDA_FLAGS}")
       endif()
     endforeach()
     # CUDA files are compiled with 
@@ -100,7 +100,7 @@ if (WIN32)
 endif(WIN32)
 
 if (USING_CLANG_FOR_CUDA)
-  string(APPEND CLANG_FLAGS " --cuda-path=${CUDA_TOOLKIT_ROOT_DIR}")
+  string(APPEND CLANG_CUDA_FLAGS " --cuda-path=${CUDA_TOOLKIT_ROOT_DIR}")
   include_directories(${CUDA_TOOLKIT_INCLUDE})
 endif()
 
@@ -110,13 +110,13 @@ set(CUTLASS_NVCC_KEEP              OFF            CACHE BOOL "Keep intermediate 
 
 foreach(ARCH ${CUTLASS_NVCC_ARCHS})
   string(APPEND NVCC_FLAGS " -gencode arch=compute_${ARCH},code=sm_${ARCH}")
-  string(APPEND CLANG_FLAGS " --cuda-gpu-arch=sm_${ARCH}")
+  string(APPEND CLANG_CUDA_FLAGS " --cuda-gpu-arch=sm_${ARCH}")
 endforeach()
 
 
 if (CUTLASS_NVCC_KEEP)
     string(APPEND NVCC_FLAGS " -keep")
-    string(APPEND CLANG_FLAGS " -save-temps=obj")
+    string(APPEND CLANG_CUDA_FLAGS " -save-temps=obj")
 endif()
 
 if (WIN32 AND CUTLASS_NATIVE_CUDA)
@@ -140,8 +140,7 @@ if (CUTLASS_NATIVE_CUDA)
   set(CMAKE_CUDA_FLAGS_DEBUG "${NVCC_FLAGS_DEBUG}")
   set(CMAKE_CUDA_FLAGS_RELEASE "${NVCC_FLAGS_RELEASE}")
 elseif(USING_CLANG_FOR_CUDA)
-  set(CMAKE_CXX_FLAGS "${CLANG_FLAGS}")
-  set(CMAKE_CXX_FLAGS_DEBUG "${CLANG_FLAGS_DEBUG}")
+  set(CMAKE_CXX_FLAGS_DEBUG "${CLANG_CUDA_FLAGS_DEBUG}")
   set(CMAKE_CXX_FLAGS_RELEASE "${CLANG_FLAGS_RELEASE}")
 else()
   set(CUDA_NVCC_FLAGS ${NVCC_FLAGS})
