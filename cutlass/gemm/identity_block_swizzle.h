@@ -39,7 +39,7 @@ struct IdentityBlockSwizzle {
   CUTLASS_DEVICE IdentityBlockSwizzle() {}
 
   /// Swizzle the block index.
-  CUTLASS_DEVICE dim3 swizzle() { return blockIdx; }
+  CUTLASS_DEVICE uint3 swizzle() { return blockIdx; }
 };
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
