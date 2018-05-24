@@ -165,8 +165,8 @@ TEST(Layout, igemm) {
     for (int i = 0; i < 33; ++i) {
         test::Layout::Coordinate coord = layout(i);
         int index = layout(coord);
-        EXPECT_EQ(i, index)
-            << "[" << i << "] - (" << layout(i) << ") => " << layout(layout(i)) << std::endl;
+        EXPECT_EQ(i, index) << "Foo";
+          //            << "[" << i << "] - (" << layout(i) << ") => " << layout(layout(i)) << std::endl;
     }
 }
 
@@ -186,8 +186,8 @@ TEST(Layout, sgemm_accum) {
     for (int i = 0; i < 32; ++i) {
         test::Layout::Coordinate coord = layout(i);
         int index = layout(coord);
-        EXPECT_EQ(i, index)
-            << "[" << i << "] - (" << layout(i) << ") => " << layout(layout(i)) << std::endl;
+        EXPECT_EQ(i, index) << "Bar";
+        //            << "[" << i << "] - (" << layout(i) << ") => " << layout(layout(i)) << std::endl;
     }
 }
 
