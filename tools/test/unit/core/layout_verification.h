@@ -152,7 +152,7 @@ struct HashUint64 {
 
     for (int byte = 0; byte < sizeof(value); ++byte) {
       h = (h << 4) + *s++;
-      if (high = (h & 0xF0000000)) {
+      if ((high = (h & 0xF0000000))) {
         h ^= high >> 24;
       }
       h &= ~high;
