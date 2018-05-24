@@ -52,6 +52,7 @@ elseif(USING_CLANG_FOR_CUDA)
     endforeach()
     # CUDA files are compiled with 
     add_executable(${_TARGET} ${_ARGS})
+    target_link_libraries(${_TARGET} ${CUDA_CUDART_LIBRARY})
   endmacro()
 else()
   # FindCUDA fails to detect VS 2017 due to a changed directory format of the toolkits.
@@ -130,10 +131,13 @@ if (UNIX)
 endif()
 
 string(APPEND NVCC_FLAGS_DEBUG " -g")
+string(APPEND CLANG_CUDA_FLAGS_DEBUG " -g")
 string(APPEND NVCC_FLAGS_RELEASE " -O3")
+string(APPEND CLANG_CUDA_FLAGS_RELEASE " -O3")
 
 # define NDEBUG for release mode to disable assertions
 string(APPEND NVCC_FLAGS_RELEASE " -DNDEBUG")
+string(APPEND CLANG_CUDA_FLAGS_RELEASE " -DNDEBUG")
 
 if (CUTLASS_NATIVE_CUDA)
   set(CMAKE_CUDA_FLAGS "${NVCC_FLAGS}")
@@ -141,7 +145,7 @@ if (CUTLASS_NATIVE_CUDA)
   set(CMAKE_CUDA_FLAGS_RELEASE "${NVCC_FLAGS_RELEASE}")
 elseif(USING_CLANG_FOR_CUDA)
   set(CMAKE_CXX_FLAGS_DEBUG "${CLANG_CUDA_FLAGS_DEBUG}")
-  set(CMAKE_CXX_FLAGS_RELEASE "${CLANG_FLAGS_RELEASE}")
+  set(CMAKE_CXX_FLAGS_RELEASE "${CLANG_CUDA_FLAGS_RELEASE}")
 else()
   set(CUDA_NVCC_FLAGS ${NVCC_FLAGS})
   set(CUDA_NVCC_FLAGS_DEBUG ${NVCC_FLAGS_DEBUG})
