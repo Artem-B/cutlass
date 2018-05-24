@@ -26,9 +26,14 @@ set(CUTLASS_LANGUAGES CXX)
 project(CUTLASS ${CUTLASS_LANGUAGES})
 
 message("Compiler=${CMAKE_CXX_COMPILER_ID}")
-if (CUDA_COMPILER STREQUAL "clang" AND CMAKE_CXX_COMPILER_ID STREQUAL "Clang")
-  message("Using clang for CUDA compilation")
-  set(USING_CLANG_FOR_CUDA 1)
+message("CUDA Compiler=${CUDA_COMPILER}")
+if(CUDA_COMPILER STREQUAL "clang")
+  if(CMAKE_CXX_COMPILER_ID STREQUAL "Clang")
+    message("Using clang for CUDA compilation")
+    set(USING_CLANG_FOR_CUDA 1)
+  else()
+    message(FATAL_ERROR "CUDA_COMPILER is set to clang, but C++ compiler is ${CMAKE_CXX_COMPILER_ID}")
+  endif()
 endif()
 
 # CMake 3.9.0 has native support for CUDA without the need of the CUDA package. Use it!
